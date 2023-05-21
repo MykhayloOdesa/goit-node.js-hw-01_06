@@ -1,6 +1,6 @@
 # goit-node.js-hw-01_06
 
-# HW #1:
+# HW#1:
 
 # yargs /
 
