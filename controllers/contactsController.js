@@ -1,45 +1,59 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const contactsService = require("../services/contactsService");
 
-const contactsPath = path.join(__dirname, "db", "contacts.json");
-
-async function listContacts() {
-  const data = await fs.readFile(contactsPath);
-  return JSON.parse(data);
-}
-
-async function getContactById(contactID) {
-  const data = await listContacts();
-  const result = data.find((contact) => contact.id === contactID);
-  return result || null;
-}
-
-async function removeContact(contactID) {
-  const data = await listContacts();
-  const index = data.findIndex((contact) => contact.id === contactID);
-
-  if (index !== -1) {
-    const [result] = data.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-    return result;
+const listContacts = async (_, response, next) => {
+  try {
+    const contacts = await contactsService.listContactsService();
+    response.json(contacts);
+  } catch (error) {
+    next(error);
   }
+};
 
-  return null;
-}
+const getContactById = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const contact = await contactsService.getContactByIdService(id);
+    response.json(contact);
+  } catch (error) {
+    next(error);
+  }
+};
 
-async function addContact(name, email, phone) {
-  const data = await listContacts();
-  const addedContact = {
-    id: nanoid(),
-    name,
-    email,
-    phone,
-  };
+const addContact = async (request, response, next) => {
+  try {
+    const body = request.body;
+    const newContact = await contactsService.addContactService(body);
+    return response.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+};
 
-  data.push(addedContact);
-  await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-  return addedContact;
-}
+const removeContact = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    await contactsService.removeContactService(id);
+    response.json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
 
-module.exports = { listContacts, getContactById, removeContact, addContact };
+const updateContact = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const body = request.body;
+    const updatedContact = await contactsService.updateContactService(id, body);
+    response.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+};
