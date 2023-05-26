@@ -3,7 +3,6 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const { contactsRouter } = require("./routes/api/contactsRouter");
-const { globalErrorHandler } = require("./middlewares/globalErrorHandler");
 
 const app = express();
 
@@ -15,6 +14,12 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
-app.use(globalErrorHandler);
+app.use((_, response) => {
+  response.status(404).json({ message: "Not found" });
+});
+
+app.use((error, _, response) => {
+  error.status === 500 && response.status(500).json("Internal Server Error");
+});
 
 module.exports = app;

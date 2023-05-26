@@ -12,7 +12,7 @@ async function listContactsService() {
 async function getContactByIdService(contactID) {
   const data = await listContactsService();
   const contact = data.find((contact) => contact.id === contactID);
-  return contact;
+  return contact || null;
 }
 
 async function addContactService(data) {
@@ -37,7 +37,7 @@ async function removeContactService(contactID) {
     return contactID;
   }
 
-  throw new Error();
+  return null;
 }
 
 async function updateContactService(contactID, body) {
@@ -45,7 +45,7 @@ async function updateContactService(contactID, body) {
   let contact = contacts.find((contact) => contact.id === contactID);
 
   if (!contact) {
-    throw new Error();
+    return null;
   }
 
   contact = { ...contact, ...body };

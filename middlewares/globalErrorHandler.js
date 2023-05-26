@@ -1,27 +1,16 @@
-const globalErrorHandler = (error, request, response, next) => {
-  if (error.status === 400 && request.status === "PUT") {
-    response.status(400).json({
-      message: "missing fields",
-    });
-  }
-
-  if (error.status === 400) {
-    response.status(400).json({
-      message: "missing required name field",
-    });
-  }
-
-  if (error.status === 404) {
-    response.status(404).json({
-      message: "Not found",
-    });
-  }
-
-  if (error.status === 500) {
-    response.status(500).json({
-      message: error.message || "Something went wrong please try again later",
-    });
-  }
+const messages = {
+  400: "Bad Request",
+  401: "Unauthorized",
+  403: "Forbidden",
+  404: "Not Found",
+  409: "Conflict",
 };
 
-module.exports = { globalErrorHandler };
+class GlobalErrorHandler extends Error {
+  constructor(status, message = messages[status]) {
+    super(message);
+    this.status = status;
+  }
+}
+
+module.exports = { GlobalErrorHandler };
