@@ -22,7 +22,7 @@ async function addContactService(data) {
     ...data,
   };
 
-  data.push(addedContact);
+  contacts.push(addedContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return addedContact;
 }
