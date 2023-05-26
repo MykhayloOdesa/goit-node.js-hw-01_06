@@ -88,7 +88,7 @@ const updateContact = async (request, response, next) => {
       );
     }
 
-    return response.json(updatedContact);
+    response.json(updatedContact);
   } catch (error) {
     next(error);
   }

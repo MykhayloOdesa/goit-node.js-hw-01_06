@@ -40,18 +40,17 @@ async function removeContactService(id) {
   return null;
 }
 
-async function updateContactService(contactID, body) {
+async function updateContactService(id, body) {
   const contacts = await listContactsService();
-  let contact = contacts.find((contact) => contact.id === contactID);
+  const index = contacts.findIndex((contact) => contact.id === id);
 
-  if (!contact) {
-    return null;
+  if (index !== -1) {
+    contacts[index] = { id, ...body };
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
   }
 
-  contact = { ...contact, ...body };
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contact;
+  return null;
 }
 
 module.exports = {
