@@ -11,7 +11,8 @@ async function listContactsService() {
 
 async function getContactByIdService(contactID) {
   const data = await listContactsService();
-  return data.find((contact) => contact.id === contactID);
+  const contact = data.find((contact) => contact.id === contactID);
+  return contact;
 }
 
 async function addContactService(data) {

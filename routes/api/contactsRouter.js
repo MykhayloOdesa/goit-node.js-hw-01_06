@@ -8,11 +8,11 @@ const router = express.Router();
 
 router.get("/", contactsController.listContacts);
 
-router.get("/:contactID", contactsController.getContactById);
+router.get("/:id", contactsController.getContactById);
 
 router.post("/", contactsSchema.validate, contactsController.addContact);
 
-router.delete("/:contactID", contactsController.removeContact);
+router.delete("/:id", contactsController.removeContact);
 
 router.put(
   "/:contactID",
