@@ -10,13 +10,13 @@ router.get("/", contactsController.listContacts);
 
 router.get("/:contactID", contactsController.getContactById);
 
-router.post("/", contactsSchema.validate(), contactsController.addContact);
+router.post("/", contactsSchema.validate, contactsController.addContact);
 
 router.delete("/:contactID", contactsController.removeContact);
 
 router.patch(
   "/:contactID",
-  contactsSchema.validate(),
+  contactsSchema.validate,
   contactsController.updateContact
 );
 
