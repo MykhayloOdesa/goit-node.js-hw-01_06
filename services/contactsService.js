@@ -27,14 +27,14 @@ async function addContactService(data) {
   return addedContact;
 }
 
-async function removeContactService(contactID) {
+async function removeContactService(id) {
   const data = await listContactsService();
-  const index = data.findIndex((contact) => contact.id === contactID);
+  const index = data.findIndex((contact) => contact.id === id);
 
   if (index !== -1) {
     data.splice(index, 1);
     await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-    return contactID;
+    return id;
   }
 
   return null;
@@ -49,6 +49,7 @@ async function updateContactService(contactID, body) {
   }
 
   contact = { ...contact, ...body };
+
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contact;
 }

@@ -5,7 +5,7 @@ const { GlobalErrorHandler } = require("../middlewares/GlobalErrorHandler");
 const listContacts = async (_, response, next) => {
   try {
     const contacts = await contactsService.listContactsService();
-    response.json(contacts);
+    return response.json(contacts);
   } catch (error) {
     next(error);
   }
@@ -17,10 +17,13 @@ const getContactById = async (request, response, next) => {
     const contact = await contactsService.getContactByIdService(id);
 
     if (!contact) {
-      throw new GlobalErrorHandler(404, "Not found");
+      throw new GlobalErrorHandler(
+        404,
+        response.json({ message: "Not found" })
+      );
     }
 
-    response.json(contact);
+    return response.json(contact);
   } catch (error) {
     next(error);
   }
@@ -30,7 +33,10 @@ const addContact = async (request, response, next) => {
   try {
     const { error } = contactsSchema.validate(request.body);
     if (error) {
-      throw new GlobalErrorHandler(400, "missing required name field");
+      throw new GlobalErrorHandler(
+        400,
+        response.json({ message: "missing required name field" })
+      );
     }
 
     const body = request.body;
@@ -45,11 +51,15 @@ const removeContact = async (request, response, next) => {
   try {
     const { id } = request.params;
     const removedContact = await contactsService.removeContactService(id);
+
     if (!removedContact) {
-      throw new GlobalErrorHandler(404, "Not found");
+      throw new GlobalErrorHandler(
+        404,
+        response.json({ message: "Not found" })
+      );
     }
 
-    response.json({ message: "contact deleted" });
+    return response.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
@@ -58,19 +68,27 @@ const removeContact = async (request, response, next) => {
 const updateContact = async (request, response, next) => {
   try {
     const { error } = contactsSchema.validate(request.body);
+
     if (error) {
-      throw new GlobalErrorHandler(400, "missing fields");
+      throw new GlobalErrorHandler(
+        400,
+        response.json({ message: "missing fields" })
+      );
     }
 
     const { id } = request.params;
     const body = request.body;
 
     const updatedContact = await contactsService.updateContactService(id, body);
+
     if (!updatedContact) {
-      throw new GlobalErrorHandler(404, "Not found");
+      throw new GlobalErrorHandler(
+        404,
+        response.json({ message: "Not found" })
+      );
     }
 
-    response.json(updatedContact);
+    return response.json(updatedContact);
   } catch (error) {
     next(error);
   }
