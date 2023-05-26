@@ -14,7 +14,7 @@ router.post("/", contactsSchema.validate, contactsController.addContact);
 
 router.delete("/:contactID", contactsController.removeContact);
 
-router.patch(
+router.put(
   "/:contactID",
   contactsSchema.validate,
   contactsController.updateContact
