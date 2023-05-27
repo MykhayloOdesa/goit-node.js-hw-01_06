@@ -1,6 +1,6 @@
 # goit-node.js-hw-01_06
 
-## HW#01 (CLI - Command Line Interface):
+## HW#01 (CLI - Command-Line Interface):
 
 ### yargs /
 
@@ -29,7 +29,7 @@
 
 Для кожної домашньої роботи створюйте свою гілку.
 
-- hw02
+- hw02 - npm run lint / https://prnt.sc/usquA9pOCWbZ
 - hw03
 - hw04
 - hw05
