@@ -1,6 +1,6 @@
 # goit-node.js-hw-01_06
 
-## HW#01 (CLI - Command Line Interface):
+## HW#01 (CLI - Command-Line Interface):
 
 ### yargs /
 
