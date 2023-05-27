@@ -1,94 +1,82 @@
 const contactsService = require("../services/contactsService");
-const { contactsSchema } = require("../helpers/schemas/contactsSchema");
-const { GlobalErrorHandler } = require("../middlewares/GlobalErrorHandler");
+const { contactsSchema } = require("../utils/helpers/schemas/contactsSchema");
+const { HttpError } = require("../utils/helpers/middlewares/HttpError");
 
-const listContacts = async (_, response, next) => {
+const listContacts = async (_, res, next) => {
   try {
     const contacts = await contactsService.listContactsService();
-    return response.json(contacts);
+    return res.json(contacts);
   } catch (error) {
     next(error);
   }
 };
 
-const getContactById = async (request, response, next) => {
+const getContactById = async (req, res, next) => {
   try {
-    const { id } = request.params;
+    const { id } = req.params;
     const contact = await contactsService.getContactByIdService(id);
 
     if (!contact) {
-      throw new GlobalErrorHandler(
-        404,
-        response.json({ message: "Not found" })
-      );
+      throw new HttpError(404, res.json({ message: "Not found" }));
     }
 
-    return response.json(contact);
+    return res.json(contact);
   } catch (error) {
     next(error);
   }
 };
 
-const addContact = async (request, response, next) => {
+const addContact = async (req, res, next) => {
   try {
-    const { error } = contactsSchema.validate(request.body);
+    const { error } = contactsSchema.validate(req.body);
     if (error) {
-      throw new GlobalErrorHandler(
+      throw new HttpError(
         400,
-        response.json({ message: "missing required name field" })
+        res.json({ message: "missing required name field" })
       );
     }
 
-    const body = request.body;
+    const body = req.body;
     const newContact = await contactsService.addContactService(body);
-    return response.status(201).json(newContact);
+    return res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
 };
 
-const removeContact = async (request, response, next) => {
+const removeContact = async (req, res, next) => {
   try {
-    const { id } = request.params;
+    const { id } = req.params;
     const removedContact = await contactsService.removeContactService(id);
 
     if (!removedContact) {
-      throw new GlobalErrorHandler(
-        404,
-        response.json({ message: "Not found" })
-      );
+      throw new HttpError(404, res.json({ message: "Not found" }));
     }
 
-    return response.json({ message: "contact deleted" });
+    return res.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
 };
 
-const updateContact = async (request, response, next) => {
+const updateContact = async (req, res, next) => {
   try {
-    const { error } = contactsSchema.validate(request.body);
+    const { error } = contactsSchema.validate(req.body);
 
     if (error) {
-      throw new GlobalErrorHandler(
-        400,
-        response.json({ message: "missing fields" })
-      );
+      throw new HttpError(400, res.json({ message: "missing fields" }));
     }
 
-    const { id } = request.params;
-    const body = request.body;
+    const { id } = req.params;
+    const body = req.body;
 
     const updatedContact = await contactsService.updateContactService(id, body);
 
     if (!updatedContact) {
-      throw new GlobalErrorHandler(
-        404,
-        response.json({ message: "Not found" })
-      );
+      throw new HttpError(404, res.json({ message: "Not found" }));
     }
 
-    response.json(updatedContact);
+    return res.json(updatedContact);
   } catch (error) {
     next(error);
   }

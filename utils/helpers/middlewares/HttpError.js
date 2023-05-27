@@ -6,11 +6,11 @@ const messages = {
   409: "Conflict",
 };
 
-class GlobalErrorHandler extends Error {
+class HttpError extends Error {
   constructor(status, message = messages[status]) {
     super(message);
     this.status = status;
   }
 }
 
-module.exports = { GlobalErrorHandler };
+module.exports = { HttpError };

@@ -14,12 +14,13 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
-app.use((_, response) => {
-  response.status(404).json({ message: "Not found" });
+app.use((_, res) => {
+  res.status(404).json({ message: "Not found" });
 });
 
-app.use((error, _, response) => {
-  error.status === 500 && response.status(500).json("Internal Server Error");
+app.use((error, _, res) => {
+  const { status = 500, message = "Internal Server Error" } = error;
+  res.status(status).json(message);
 });
 
 module.exports = app;
