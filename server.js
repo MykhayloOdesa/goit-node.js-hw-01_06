@@ -3,3 +3,22 @@ const app = require("./app");
 app.listen(3000, () => {
   console.log("Server running. Use our API on port: 3000");
 });
+
+// Model Schema
+
+// {
+//   name: {
+//     type: String,
+//     required: [true, 'Set name for contact'],
+//   },
+//   email: {
+//     type: String,
+//   },
+//   phone: {
+//     type: String,
+//   },
+//   favorite: {
+//     type: Boolean,
+//     default: false,
+//   },
+// }
