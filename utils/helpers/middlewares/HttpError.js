@@ -4,6 +4,7 @@ const messages = {
   403: "Forbidden",
   404: "Not Found",
   409: "Conflict",
+  422: "Unprocessable Entity",
 };
 
 class HttpError extends Error {
