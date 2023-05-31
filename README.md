@@ -30,7 +30,7 @@
 Для кожної домашньої роботи створюйте свою гілку.
 
 - hw02 - npm run lint / https://prnt.sc/usquA9pOCWbZ
-- hw03
+- hw03 - npm run lint / https://prnt.sc/mtauMAW1eIHt
 - hw04
 - hw05
 - hw06
