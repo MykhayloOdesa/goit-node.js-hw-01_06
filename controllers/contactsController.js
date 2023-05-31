@@ -36,10 +36,27 @@ const updateContact = controllerWrapper(async (req, res) => {
   return res.json(updatedContact);
 });
 
+const updateStatusContact = controllerWrapper(async (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+
+  if (body) {
+    body.favorite = true;
+  }
+
+  const updatedStatusContact = await contactsService.updateContactService(
+    id,
+    body
+  );
+
+  return res.json(updatedStatusContact);
+});
+
 module.exports = {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 };

@@ -7,7 +7,7 @@ const contactsAddingSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-const updateTaskValidationSchema = Joi.object()
+const updateContactSchema = Joi.object()
   .keys({
     name: contactsAddingSchema.extract("name").optional(),
     email: contactsAddingSchema.extract("email").optional(),
@@ -18,5 +18,5 @@ const updateTaskValidationSchema = Joi.object()
 
 module.exports = {
   contactsAddingSchema,
-  updateTaskValidationSchema,
+  updateContactSchema,
 };

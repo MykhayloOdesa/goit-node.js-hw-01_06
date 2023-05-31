@@ -8,7 +8,7 @@ const { validateBody } = require("../../utils/helpers/validateBody");
 
 const {
   contactsAddingSchema,
-  updateTaskValidationSchema,
+  updateContactSchema,
 } = require("../../utils/helpers/schemas/contactsSchema");
 
 router.get("/", contactsController.listContacts);
@@ -25,8 +25,14 @@ router.delete("/:id", contactsController.removeContact);
 
 router.put(
   "/:id",
-  validateBody(updateTaskValidationSchema),
+  validateBody(updateContactSchema),
   contactsController.updateContact
+);
+
+router.patch(
+  "/:id/favorite",
+  validateBody(updateContactSchema),
+  contactsController.updateStatusContact
 );
 
 module.exports = { contactsRouter: router };

@@ -43,10 +43,25 @@ async function updateContactService(id, body) {
   return contact;
 }
 
+async function updateStatusContactService(id, body) {
+  const contact = await Contacts.findByIdAndUpdate(id, body, { new: true });
+
+  if (!contact) {
+    throw new HttpError(404, "Not found");
+  }
+
+  if (!body) {
+    throw new HttpError(422, "missing field favorite");
+  }
+
+  return contact;
+}
+
 module.exports = {
   listContactsService,
   getContactByIdService,
   addContactService,
   removeContactService,
   updateContactService,
+  updateStatusContactService,
 };
