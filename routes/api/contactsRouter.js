@@ -11,7 +11,7 @@ const {
   updateContactSchema,
 } = require("../../utils/helpers/schemas/contactsSchema");
 
-router.get("/", contactsController.listContacts);
+router.get("/", contactsController.getContacts);
 
 router.get("/:id", contactsController.getContactById);
 

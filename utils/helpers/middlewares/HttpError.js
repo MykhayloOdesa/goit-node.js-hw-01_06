@@ -15,3 +15,11 @@ class HttpError extends Error {
 }
 
 module.exports = { HttpError };
+
+// if (!body) {
+//   throw new HttpError(422, "missing field favorite");
+// }
+
+// if (!body) {
+//   throw new HttpError(422, "missing fields");
+// }
