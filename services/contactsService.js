@@ -46,7 +46,7 @@ async function updateStatusContactService(id, body) {
     throw new HttpError(404, "Not found");
   }
 
-  return { ...contact, body: { favorite: true } };
+  return contact;
 }
 
 module.exports = {

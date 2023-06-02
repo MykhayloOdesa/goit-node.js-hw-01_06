@@ -16,6 +16,7 @@ const { validateBody } = require("../../utils/helpers/validateBody");
 const {
   contactsAddingSchema,
   updateContactSchema,
+  updateStatusSchema,
 } = require("../../utils/helpers/schemas/contactsSchema");
 
 router.get("/", getContacts);
@@ -30,7 +31,7 @@ router.put("/:id", validateBody(updateContactSchema), updateContact);
 
 router.patch(
   "/:id/favorite",
-  validateBody(updateContactSchema),
+  validateBody(updateStatusSchema),
   updateStatusContact
 );
 
