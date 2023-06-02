@@ -4,7 +4,7 @@ const contactsAddingSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string(),
   phone: Joi.string(),
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean(),
 });
 
 const updateContactSchema = Joi.object()
@@ -16,7 +16,12 @@ const updateContactSchema = Joi.object()
   })
   .or("name", "email", "phone", "favorite");
 
+const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 module.exports = {
   contactsAddingSchema,
   updateContactSchema,
+  updateStatusSchema,
 };

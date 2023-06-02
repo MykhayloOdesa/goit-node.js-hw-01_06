@@ -1,7 +1,7 @@
 const { HttpError } = require("../utils/helpers/middlewares/HttpError");
 const { Contacts } = require("../models/Contacts");
 
-async function listContactsService() {
+async function getContactsService() {
   return await Contacts.find();
 }
 
@@ -36,10 +36,6 @@ async function updateContactService(id, body) {
     throw new HttpError(404, "Not found");
   }
 
-  if (!body) {
-    throw new HttpError(422, "missing fields");
-  }
-
   return contact;
 }
 
@@ -50,15 +46,11 @@ async function updateStatusContactService(id, body) {
     throw new HttpError(404, "Not found");
   }
 
-  if (!body) {
-    throw new HttpError(422, "missing field favorite");
-  }
-
   return contact;
 }
 
 module.exports = {
-  listContactsService,
+  getContactsService,
   getContactByIdService,
   addContactService,
   removeContactService,
