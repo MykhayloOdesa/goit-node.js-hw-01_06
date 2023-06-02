@@ -43,7 +43,6 @@ const updateStatusContact = controllerWrapper(async (req, res) => {
   const updatedStatusContact = await contactsService.updateStatusContactService(
     id,
     req.body
-    // (req.body.favorite = true)
   );
 
   return res.json(updatedStatusContact);
