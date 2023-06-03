@@ -4,14 +4,11 @@ const schema = new mongoose.Schema(
   {
     name: {
       type: String,
+      unique: true,
       required: [true, "Set name for contact"],
     },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
+    email: { type: String, unique: true },
+    phone: { type: String, unique: true },
     favorite: {
       type: Boolean,
       default: false,
