@@ -35,9 +35,9 @@ const login = async (req, res) => {
     throw new HttpError(401, "Email or password is wrong");
   }
 
-  const passwordCompared = await bcrypt.compare(password, user.password);
+  const isPasswordCompared = await bcrypt.compare(password, user.password);
 
-  if (!passwordCompared) {
+  if (!isPasswordCompared) {
     throw new HttpError(401, "Email or password is wrong");
   }
 
@@ -62,7 +62,7 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   await Users.findByIdAndUpdate(_id, { token: "" });
 
-  res.status(204).json();
+  res.status(204).json({ message: "Successful logout" });
 };
 
 const getCurrent = async (req, res) => {
@@ -72,10 +72,6 @@ const getCurrent = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    throw new HttpError(422, "Missing subscription field");
-  }
-
   const { _id } = req.user;
   const { subscription } = req.body;
 

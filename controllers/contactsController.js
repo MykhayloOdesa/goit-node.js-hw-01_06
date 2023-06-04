@@ -9,11 +9,11 @@ const getContacts = controllerWrapper(async (req, res) => {
   const skip = (page - 1) * limit;
   const filter = { owner };
 
-  if (favorite && favorite === "true") {
+  if (favorite === "true") {
     filter.favorite = true;
   }
 
-  if (favorite && favorite === "false") {
+  if (!favorite) {
     filter.favorite = false;
   }
 
