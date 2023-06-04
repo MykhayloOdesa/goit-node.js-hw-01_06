@@ -11,13 +11,13 @@ const {
 
 const router = express.Router();
 
-const { validateBody } = require("../../utils/helpers/validateBody");
+const { validateBody } = require("../../utils/validateBody");
 
 const {
   contactsAddingSchema,
   updateContactSchema,
   updateStatusSchema,
-} = require("../../utils/helpers/schemas/contactsSchema");
+} = require("../../utils/schemas/contactsSchema");
 
 router.get("/", getContacts);
 
