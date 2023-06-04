@@ -4,21 +4,11 @@ const app = require("./app");
 
 const mongoose = require("mongoose");
 
-// mongoose.Promise = global.Promise;
-
 const { DB_URI, PORT } = process.env;
 
 (async () => {
   try {
-    await mongoose.connect(DB_URI, {
-      // dbName: `your database name`,
-      // useNewUrlParser: true,
-      // useNewParser: true,
-      // useCreateIndex: true,
-      // useUnifiedTopology: true,
-      // promiseLibrary: global.Promise,
-      // useFindAndModify: false,
-    });
+    await mongoose.connect(DB_URI);
 
     console.log("Database connection successful");
 
