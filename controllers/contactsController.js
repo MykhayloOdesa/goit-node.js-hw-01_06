@@ -6,7 +6,7 @@ const {
   updateContactService,
   updateStatusContactService,
 } = require("../services/contactsService");
-const { controllerWrapper } = require("../utils/helpers/controllerWrapper");
+const { controllerWrapper } = require("../utils/controllerWrapper");
 
 const getContacts = controllerWrapper(async (_, res) => {
   const contacts = await getContactsService();

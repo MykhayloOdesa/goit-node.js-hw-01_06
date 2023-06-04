@@ -1,4 +1,4 @@
-const { HttpError } = require("../utils/helpers/middlewares/HttpError");
+const { HttpError } = require("../utils/HttpError");
 const { Contacts } = require("../models/Contacts");
 
 async function getContactsService() {

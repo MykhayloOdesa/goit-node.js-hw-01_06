@@ -1,11 +1,11 @@
-const { HttpError } = require("./middlewares/HttpError");
+const { HttpError } = require("./HttpError");
 
 const validateBody = (schema) => {
   return (req, _, next) => {
     const { error } = schema.validate(req.body);
 
     if (error) {
-      next(new HttpError(error, { message: "required name field missing" }));
+      next(new HttpError(422, `${error}`));
       return;
     }
 
