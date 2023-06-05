@@ -13,7 +13,7 @@ const getContacts = controllerWrapper(async (req, res) => {
     filter.favorite = true;
   }
 
-  if (!favorite) {
+  if (favorite === "false") {
     filter.favorite = false;
   }
 
