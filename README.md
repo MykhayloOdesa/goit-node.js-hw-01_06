@@ -31,7 +31,7 @@
 
 - hw02 - npm run lint / https://prnt.sc/usquA9pOCWbZ
 - hw03 - npm run lint / https://prnt.sc/mtauMAW1eIHt
-- hw04
+- hw04 - npm run lint / https://prnt.sc/Dh8s2ZI8jdfo
 - hw05
 - hw06
 
