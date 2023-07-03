@@ -29,7 +29,7 @@ router.post('/logout', authenticate, logout);
 
 router.get('/current', authenticate, getCurrent);
 
-router.patch('/avatars', authenticate, upload.single('avatar'), updateAvatar);
+router.patch('/avatars', authenticate, upload.single('avatarURL'), updateAvatar);
 
 router.patch('/', authenticate, validateBody(updateSubscriptionSchema), updateSubscription);
 
