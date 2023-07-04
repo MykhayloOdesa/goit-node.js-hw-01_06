@@ -1,36 +1,40 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const { HttpError } = require("../utils/HttpError");
+const { HttpError } = require('../utils/HttpError');
 
-const subscriptionList = ["starter", "pro", "business"];
+const subscriptionList = ['starter', 'pro', 'business'];
 
 const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
     },
     password: {
       type: String,
-      required: [true, "Set password for user"],
+      required: [true, 'Set password for user'],
     },
     subscription: {
       type: String,
       enum: subscriptionList,
-      default: "starter",
+      default: 'starter',
     },
     token: {
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post("save", () => HttpError);
+userSchema.post('save', () => HttpError);
 
-const Users = mongoose.model("User", userSchema);
+const Users = mongoose.model('User', userSchema);
 
 module.exports = {
   Users,
