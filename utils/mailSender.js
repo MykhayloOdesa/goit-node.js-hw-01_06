@@ -12,9 +12,6 @@ const transporter = nodemailer.createTransport({
 
 // Відправка листа
 const nodeMailerFunc = (to, verificationToken) => {
-  console.log(to);
-  console.log(verificationToken);
-
   // Опції для листа
   const mailOptions = {
     from: 'customyier@gmail.com', // Ваша електронна пошта
@@ -23,8 +20,6 @@ const nodeMailerFunc = (to, verificationToken) => {
     text: `Привіт, \n\nЦе лише тестовий лист для перевірки відправки через Nodemailer.
     <a href="http://localhost:3000/users/verify/${verificationToken}">Token</a>`,
   };
-
-  console.log(mailOptions.text);
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {

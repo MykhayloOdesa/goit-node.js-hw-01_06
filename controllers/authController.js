@@ -144,8 +144,6 @@ const verificationToken = async (req, res) => {
 const verify = async (req, res) => {
   const { email } = req.body;
 
-  console.log(email);
-
   const verifiedUser = await Users.findOne({ email });
 
   if (!verifiedUser) {
@@ -155,8 +153,6 @@ const verify = async (req, res) => {
   if (verifiedUser.verify) {
     throw new HttpError(400, 'Verification has already been passed');
   }
-
-  console.log(verifiedUser);
 
   nodeMailerFunc(email, verifiedUser.verificationToken);
 
