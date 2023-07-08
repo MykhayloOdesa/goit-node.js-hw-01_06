@@ -4,6 +4,9 @@ const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
+const { nanoid } = require('nanoid');
+
+const nodeMailerFunc = require('../utils/mailSender');
 
 const { SECRET_KEY } = process.env;
 
@@ -24,7 +27,14 @@ const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
 
-  const newUser = await Users.create({ ...req.body, password: hashedPassword, avatarURL });
+  const newUser = await Users.create({
+    ...req.body,
+    password: hashedPassword,
+    avatarURL,
+    verificationToken: nanoid(),
+  });
+
+  nodeMailerFunc(email, newUser.verificationToken);
 
   res.status(201).json({
     user: {
@@ -116,6 +126,43 @@ const updateAvatar = async (req, res) => {
   res.json({ avatarURL });
 };
 
+const verificationToken = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  const user = await Users.findOneAndUpdate(
+    { verificationToken },
+    { verify: true, verificationToken: '' }
+  );
+
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
+
+  res.status(200).json({ message: 'Verification successful' });
+};
+
+const verify = async (req, res) => {
+  const { email } = req.body;
+
+  console.log(email);
+
+  const verifiedUser = await Users.findOne({ email });
+
+  if (!verifiedUser) {
+    throw new HttpError(400, 'User Not Found');
+  }
+
+  if (verifiedUser.verify) {
+    throw new HttpError(400, 'Verification has already been passed');
+  }
+
+  console.log(verifiedUser);
+
+  nodeMailerFunc(email, verifiedUser.verificationToken);
+
+  res.json('Verification email sent');
+};
+
 module.exports = {
   register: controllerWrapper(register),
   login: controllerWrapper(login),
@@ -123,4 +170,6 @@ module.exports = {
   getCurrent: controllerWrapper(getCurrent),
   updateSubscription: controllerWrapper(updateSubscription),
   updateAvatar: controllerWrapper(updateAvatar),
+  verificationToken: controllerWrapper(verificationToken),
+  verify: controllerWrapper(verify),
 };
