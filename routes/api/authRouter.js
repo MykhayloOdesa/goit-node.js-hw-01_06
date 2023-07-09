@@ -12,7 +12,7 @@ const {
   updateSubscription,
   updateAvatar,
   verificationToken,
-  verify,
+  resendVerifyEmail,
 } = require('../../controllers/authController');
 
 const {
@@ -38,6 +38,6 @@ router.patch('/', authenticate, validateBody(updateSubscriptionSchema), updateSu
 
 router.get('/verify/:verificationToken', verificationToken);
 
-router.post('/verify', validateBody(verifySchema), verify);
+router.post('/verify', validateBody(verifySchema), resendVerifyEmail);
 
 module.exports = { authRouter: router };
