@@ -52,6 +52,10 @@ const login = async (req, res) => {
     throw new HttpError(401, 'Email or password is wrong');
   }
 
+  if (!user.verify) {
+    throw new HttpError(401, 'Email or password is wrong');
+  }
+
   const isPasswordCompared = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCompared) {
@@ -147,36 +151,18 @@ const verify = async (req, res) => {
   const verifiedUser = await Users.findOne({ email });
 
   if (!verifiedUser) {
-    throw new HttpError(400, 'User Not Found');
+    res.status(404).json({ message: 'User Not Found' });
+    // throw new HttpError(404, 'User Not Found');
   }
 
-  if (verifiedUser.verify) {
-    throw new HttpError(400, 'Verification has already been passed');
+  if (!verifiedUser.verify) {
+    res.status(400).json({ message: 'Verification has already been passed' });
+    // throw new HttpError(400, 'Verification has already been passed');
   }
 
   nodeMailerFunc(email, verifiedUser.verificationToken);
 
-  res.status(201).json('Verification email sent');
-};
-
-const resendVerifyEmail = async (req, res) => {
-  const { email } = req.body;
-
-  const user = await Users.findOne({ email });
-
-  if (!user) {
-    throw new HttpError(401, `Email not found`);
-  }
-
-  if (user.verify) {
-    throw new HttpError(400, `Verification has already been passed`);
-  }
-
-  nodeMailerFunc(email, user.verificationToken);
-
-  res.status(200).json({
-    message: 'Verification email sent',
-  });
+  res.status(200).json({ message: 'Verification email sent' });
 };
 
 module.exports = {
@@ -188,5 +174,4 @@ module.exports = {
   updateAvatar: controllerWrapper(updateAvatar),
   verificationToken: controllerWrapper(verificationToken),
   verify: controllerWrapper(verify),
-  resendVerifyEmail: controllerWrapper(resendVerifyEmail),
 };
