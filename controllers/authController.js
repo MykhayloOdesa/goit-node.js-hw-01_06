@@ -49,11 +49,11 @@ const login = async (req, res) => {
   const user = await Users.findOne({ email });
 
   if (!user) {
-    throw new HttpError(401, 'Email or password is wrong');
+    res.json(401).json({ message: 'Email or password is wrong' });
   }
 
   if (!user.verify) {
-    throw new HttpError(401, 'Email Not Verified');
+    res.json(401).json({ message: 'Email Not Verified' });
   }
 
   const isPasswordCompared = await bcrypt.compare(password, user.password);
@@ -133,14 +133,16 @@ const updateAvatar = async (req, res) => {
 const verificationToken = async (req, res) => {
   const { verificationToken } = req.params;
 
-  const user = await Users.findOneAndUpdate(
-    { verificationToken },
-    { verify: true, verificationToken: '' }
-  );
+  const user = await Users.findOne({ verificationToken });
 
   if (!user) {
-    throw new HttpError(404, 'User not found');
+    res.status(404).json({ message: 'User Not Found' });
   }
+
+  await Users.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
 
   res.status(200).json({ message: 'Verification successful' });
 };
@@ -151,13 +153,11 @@ const verify = async (req, res) => {
   const verifiedUser = await Users.findOne({ email });
 
   if (!verifiedUser) {
-    res.status(404).json({ message: 'User Not Found' });
-    // throw new HttpError(404, 'User Not Found');
+    res.status(401).json({ message: 'Email Not Found' });
   }
 
   if (!verifiedUser.verify) {
     res.status(400).json({ message: 'Verification has already been passed' });
-    // throw new HttpError(400, 'Verification has already been passed');
   }
 
   nodeMailerFunc(email, verifiedUser.verificationToken);
