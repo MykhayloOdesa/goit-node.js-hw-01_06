@@ -156,7 +156,7 @@ const verify = async (req, res) => {
     res.status(401).json({ message: 'Email Not Found' });
   }
 
-  if (!verifiedUser.verify) {
+  if (verifiedUser.verify) {
     res.status(400).json({ message: 'Verification has already been passed' });
   }
 
