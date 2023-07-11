@@ -53,7 +53,7 @@ const login = async (req, res) => {
   }
 
   if (!user.verify) {
-    res.json(401).json({ message: 'Email Not Verified' });
+    res.status(401).json({ message: 'Email Not Verified' });
   }
 
   const isPasswordCompared = await bcrypt.compare(password, user.password);
