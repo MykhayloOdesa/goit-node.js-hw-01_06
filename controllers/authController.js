@@ -4,6 +4,9 @@ const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
+const { nanoid } = require('nanoid');
+
+const nodeMailerFunc = require('../utils/mailSender');
 
 const { SECRET_KEY } = process.env;
 
@@ -24,7 +27,14 @@ const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
 
-  const newUser = await Users.create({ ...req.body, password: hashedPassword, avatarURL });
+  const newUser = await Users.create({
+    ...req.body,
+    password: hashedPassword,
+    avatarURL,
+    verificationToken: nanoid(),
+  });
+
+  nodeMailerFunc(email, newUser.verificationToken);
 
   res.status(201).json({
     user: {
@@ -39,13 +49,17 @@ const login = async (req, res) => {
   const user = await Users.findOne({ email });
 
   if (!user) {
-    throw new HttpError(401, 'Email or password is wrong');
+    res.json(401).json({ message: 'Email or password is wrong' });
+  }
+
+  if (!user.verify) {
+    res.status(401).json({ message: 'Email Not Verified' });
   }
 
   const isPasswordCompared = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCompared) {
-    throw new HttpError(401, 'Email or password is wrong');
+    res.status(401).json({ message: 'Email or password is wrong' });
   }
 
   const payload = {
@@ -116,6 +130,41 @@ const updateAvatar = async (req, res) => {
   res.json({ avatarURL });
 };
 
+const verificationToken = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  const user = await Users.findOne({ verificationToken });
+
+  if (!user) {
+    res.status(404).json({ message: 'User Not Found' });
+  }
+
+  await Users.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.status(200).json({ message: 'Verification successful' });
+};
+
+const verify = async (req, res) => {
+  const { email } = req.body;
+
+  const verifiedUser = await Users.findOne({ email });
+
+  if (!verifiedUser) {
+    res.status(401).json({ message: 'Email Not Found' });
+  }
+
+  if (verifiedUser.verify) {
+    res.status(400).json({ message: 'Verification has already been passed' });
+  }
+
+  nodeMailerFunc(email, verifiedUser.verificationToken);
+
+  res.status(200).json({ message: 'Verification email sent' });
+};
+
 module.exports = {
   register: controllerWrapper(register),
   login: controllerWrapper(login),
@@ -123,4 +172,6 @@ module.exports = {
   getCurrent: controllerWrapper(getCurrent),
   updateSubscription: controllerWrapper(updateSubscription),
   updateAvatar: controllerWrapper(updateAvatar),
+  verificationToken: controllerWrapper(verificationToken),
+  verify: controllerWrapper(verify),
 };
