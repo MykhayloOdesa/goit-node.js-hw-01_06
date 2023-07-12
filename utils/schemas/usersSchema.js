@@ -18,7 +18,7 @@ const updateSubscriptionSchema = Joi.object({
 });
 
 const verifySchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().required().messages({ 'any.required': 'missing required field email' }),
 });
 
 module.exports = {
