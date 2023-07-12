@@ -33,7 +33,7 @@
 - hw03 - npm run lint / https://prnt.sc/mtauMAW1eIHt
 - hw04 - npm run lint / https://prnt.sc/Dh8s2ZI8jdfo
 - hw05 - npm run lint / https://prnt.sc/HthFshvUPTu6 / https://prnt.sc/zafny0uHCRcU
-- hw06
+- hw06 - done
 
 Кожна нова гілка для ДЗ повинна робитися з master.
 
